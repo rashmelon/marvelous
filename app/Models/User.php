@@ -7,6 +7,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @property string $name
+ * @property string $email
+ */
 class User extends Authenticatable
 {
     use HasFactory;
@@ -43,7 +47,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function isSuperAdmin()
+    /**
+     * Check if the user is a super admin.
+     *
+     * @return bool
+     */
+    public function isSuperAdmin(): bool
     {
         return $this->hasRole('super-admin');
     }
