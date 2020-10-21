@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Filters\UserTypes;
 use Eminiarts\NovaPermissions\Nova\Permission;
 use Eminiarts\NovaPermissions\Nova\Role;
 use Illuminate\Http\Request;
@@ -88,7 +89,9 @@ class User extends Resource
      */
     public function filters(Request $request)
     {
-        return [];
+        return [
+            UserTypes::make(),
+        ];
     }
 
     /**
