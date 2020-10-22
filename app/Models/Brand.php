@@ -8,12 +8,16 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 /**
+ * @property int $id
+ * @property int category_id
  * @property string $name
  * @property string $slug
+ * @property string $logo_url
+ * @property string $image_url
  * @property string $description
- * @property \Illuminate\Database\Eloquent\Collection $brands
+ * @property \App\Models\Category $category
  */
-class Category extends Model
+class Brand extends Model
 {
     use HasFactory;
     use HasSlug;
@@ -36,14 +40,13 @@ class Category extends Model
             ->generateSlugsFrom('name')
             ->saveSlugsTo('slug');
     }
-
     /**
-     * A category has many brands.
+     * Get the brand category.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function brands()
+    public function category()
     {
-        return $this->hasMany(Brand::class);
+        return $this->belongsTo(Category::class);
     }
 }

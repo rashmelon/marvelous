@@ -2,24 +2,30 @@
 
 namespace App\Nova;
 
-use App\Nova\Filters\UserTypesFilter;
-use Eminiarts\NovaPermissions\Nova\Permission;
-use Eminiarts\NovaPermissions\Nova\Role;
+use App\Nova\Filters\CategoriesFilter;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Gravatar;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\MorphToMany;
-use Laravel\Nova\Fields\Password;
+use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
-class User extends Resource
+class Brand extends Resource
 {
+    /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = 'Core';
+
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\User::class;
+    public static $model = \App\Models\Brand::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -34,7 +40,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'email',
+        'id', 'name',
     ];
 
     /**
@@ -46,27 +52,25 @@ class User extends Resource
     public function fields(Request $request)
     {
         return [
-            ID::make()->sortable(),
+            ID::make(__('ID'), 'id')->sortable(),
 
-            Gravatar::make()->maxWidth(50),
+            BelongsTo::make('Category')
+                ->rules('required', 'int', 'exists:categories,id'),
 
             Text::make('Name')
-                ->sortable()
-                ->rules('required', 'max:255'),
+                ->rules('required', 'min:3', 'max:255'),
 
-            Text::make('Email')
-                ->sortable()
-                ->rules('required', 'email', 'max:254')
-                ->creationRules('unique:users,email')
-                ->updateRules('unique:users,email,{{resourceId}}'),
+            Text::make('Slug')
+                ->hideWhenCreating()
+                ->rules('required', 'min:3', 'max:255'),
 
-            Password::make('Password')
-                ->onlyOnForms()
-                ->creationRules('required', 'string', 'min:8')
-                ->updateRules('nullable', 'string', 'min:8'),
+            Textarea::make('Description')
+                ->hideFromIndex()
+                ->rules('min:10'),
 
-            MorphToMany::make('Roles', 'roles', Role::class),
-            MorphToMany::make('Permissions', 'permissions', Permission::class),
+            Image::make('Logo', 'logo_url'),
+
+            Image::make('Background image', 'image_url'),
         ];
     }
 
@@ -90,7 +94,7 @@ class User extends Resource
     public function filters(Request $request)
     {
         return [
-            UserTypesFilter::make(),
+            CategoriesFilter::make(),
         ];
     }
 

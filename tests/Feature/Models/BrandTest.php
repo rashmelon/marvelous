@@ -2,34 +2,34 @@
 
 namespace Tests\Feature\Models;
 
+use App\Models\Brand;
 use App\Models\Category;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class CategoryTest extends TestCase
+class BrandTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
 
     public function testHasFactory()
     {
-        $this->assertInstanceOf(Category::class, Category::factory()->create());
+        $this->assertInstanceOf(Brand::class, Brand::factory()->create());
     }
 
     public function testHasSlug()
     {
         $this->assertNotNull(
-            Category::factory()->create()->slug
+            Brand::factory()->create()->slug
         );
     }
 
-    public function testHasManyBrands()
+    public function testBelongsToCategory()
     {
         $this->assertInstanceOf(
-            Collection::class,
-            Category::factory()->create()->brands
+            Category::class,
+            Brand::factory()->create()->category
         );
     }
 }

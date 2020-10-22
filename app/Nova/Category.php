@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
@@ -27,7 +28,7 @@ class Category extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'name';
     /**
      * The columns that should be searched.
      *
@@ -58,6 +59,8 @@ class Category extends Resource
             Textarea::make('Description')
                 ->hideFromIndex()
                 ->rules('required', 'min:10'),
+
+            HasMany::make('Brands'),
         ];
     }
 
