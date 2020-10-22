@@ -2,32 +2,36 @@
 
 namespace App\Nova;
 
-use App\Nova\Filters\UserTypesFilter;
-use Eminiarts\NovaPermissions\Nova\Permission;
-use Eminiarts\NovaPermissions\Nova\Role;
+use App\Nova\Filters\CategoriesFilter;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Gravatar;
-use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\MorphToMany;
-use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
-class User extends Resource
+class Commentary extends Resource
 {
+    /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = 'Content';
+
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\User::class;
+    public static $model = \App\Models\Commentary::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'title';
 
     /**
      * The columns that should be searched.
@@ -35,7 +39,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'email',
+        'id', 'title'
     ];
 
     /**
@@ -47,28 +51,20 @@ class User extends Resource
     public function fields(Request $request)
     {
         return [
-            ID::make()->sortable(),
+            ID::make(__('ID'), 'id')->sortable(),
 
-            Gravatar::make()->maxWidth(50),
+            BelongsTo::make('Author', 'author', User::class)
+                ->rules('required', 'int', 'exists:users,id'),
 
-            Text::make('Name')
-                ->sortable()
-                ->rules('required', 'max:255'),
+            BelongsTo::make('Category', 'category', User::class)
+                ->rules('required', 'int', 'exists:categories,id'),
 
-            Text::make('Email')
-                ->sortable()
-                ->rules('required', 'email', 'max:254')
-                ->creationRules('unique:users,email')
-                ->updateRules('unique:users,email,{{resourceId}}'),
+            Text::make('Title')
+                ->rules('required', 'min:3', 'max:255'),
 
-            Password::make('Password')
-                ->onlyOnForms()
-                ->creationRules('required', 'string', 'min:8')
-                ->updateRules('nullable', 'string', 'min:8'),
-
-            HasMany::make('Commentaries'),
-            MorphToMany::make('Roles', 'roles', Role::class),
-            MorphToMany::make('Permissions', 'permissions', Permission::class),
+            Textarea::make('Body')
+                ->hideFromIndex()
+                ->rules('required', 'min:10'),
         ];
     }
 
@@ -92,7 +88,7 @@ class User extends Resource
     public function filters(Request $request)
     {
         return [
-            UserTypesFilter::make(),
+            CategoriesFilter::make(),
         ];
     }
 

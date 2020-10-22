@@ -3,41 +3,42 @@
 namespace Tests\Feature\Models;
 
 use App\Models\Category;
-use Illuminate\Database\Eloquent\Collection;
+use App\Models\Commentary;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class CategoryTest extends TestCase
+class CommentaryTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
 
     public function testHasFactory()
     {
-        $this->assertInstanceOf(Category::class, Category::factory()->create());
+        $this->assertInstanceOf(Commentary::class, Commentary::factory()->create());
     }
 
     public function testHasSlug()
     {
         $this->assertNotNull(
-            Category::factory()->create()->slug
+            Commentary::factory()->create()->slug
         );
     }
 
-    public function testHasManyBrands()
+    public function testBelongsToAuthor()
     {
         $this->assertInstanceOf(
-            Collection::class,
-            Category::factory()->create()->brands
+            User::class,
+            Commentary::factory()->create()->author
         );
     }
 
-    public function testHasManyCommentaries()
+    public function testBelongsToCategory()
     {
         $this->assertInstanceOf(
-            Collection::class,
-            Category::factory()->create()->commentaries
+            Category::class,
+            Commentary::factory()->create()->category
         );
     }
 }

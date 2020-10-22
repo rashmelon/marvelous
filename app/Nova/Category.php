@@ -61,6 +61,7 @@ class Category extends Resource
                 ->rules('required', 'min:10'),
 
             HasMany::make('Brands'),
+            HasMany::make('Commentaries'),
         ];
     }
 

@@ -56,4 +56,14 @@ class User extends Authenticatable
     {
         return $this->hasRole('super-admin');
     }
+
+    /**
+     * Get the author commentaries.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function commentaries()
+    {
+        return $this->hasMany(Commentary::class, 'user_id');
+    }
 }

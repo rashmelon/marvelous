@@ -8,12 +8,14 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 /**
- * @property string $name
+ * @property int $id
+ * @property int $user_id
+ * @property string $title
  * @property string $slug
- * @property string $description
- * @property \Illuminate\Database\Eloquent\Collection $brands
+ * @property string $body
+ * @property \App\Models\User $author
  */
-class Category extends Model
+class Commentary extends Model
 {
     use HasFactory;
     use HasSlug;
@@ -33,27 +35,27 @@ class Category extends Model
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('name')
+            ->generateSlugsFrom('title')
             ->saveSlugsTo('slug');
     }
 
     /**
-     * Get the category brands.
+     * Get the commentary author.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function brands()
+    public function author()
     {
-        return $this->hasMany(Brand::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
-     * Get the category commentaries.
+     * Get the commentary category.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function commentaries()
+    public function category()
     {
-        return $this->hasMany(Commentary::class);
+        return $this->belongsTo(Category::class);
     }
 }

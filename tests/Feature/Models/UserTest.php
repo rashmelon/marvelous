@@ -3,6 +3,7 @@
 namespace Tests\Feature\Models;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -29,6 +30,14 @@ class UserTest extends TestCase
 
         $this->assertFalse(
             User::factory()->create()->isSuperAdmin()
+        );
+    }
+
+    public function testHasManyCommentaries()
+    {
+        $this->assertInstanceOf(
+            Collection::class,
+            User::factory()->create()->commentaries
         );
     }
 }
