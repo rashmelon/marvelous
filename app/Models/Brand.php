@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
@@ -43,6 +44,7 @@ class Brand extends Model
             ->generateSlugsFrom('name')
             ->saveSlugsTo('slug');
     }
+
     /**
      * Get the brand category.
      *
@@ -61,5 +63,15 @@ class Brand extends Model
     public function sources(): HasMany
     {
         return $this->hasMany(Source::class);
+    }
+
+    /**
+     * A brand can have many posts through many sources.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function posts(): HasManyThrough
+    {
+        return $this->hasManyThrough(Post::class, Source::class);
     }
 }

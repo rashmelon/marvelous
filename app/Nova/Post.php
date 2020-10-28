@@ -2,38 +2,35 @@
 
 namespace App\Nova;
 
-use App\Nova\Filters\CategoriesFilter;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Fields\Trix;
 
-class Brand extends Resource
+class Post extends Resource
 {
     /**
      * The logical group associated with the resource.
      *
      * @var string
      */
-    public static $group = 'Core';
+    public static $group = 'Content';
 
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\Brand::class;
+    public static $model = \App\Models\Post::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'title';
 
     /**
      * The columns that should be searched.
@@ -41,7 +38,7 @@ class Brand extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name',
+        'id', 'title',
     ];
 
     /**
@@ -55,26 +52,25 @@ class Brand extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
 
-            BelongsTo::make('Category')
-                ->rules('required', 'int', 'exists:categories,id'),
+            BelongsTo::make('Source')
+                ->nullable()
+                ->rules('nullable', 'exists:sources,id'),
 
-            Text::make('Name')
-                ->rules('required', 'min:3', 'max:255'),
+            BelongsTo::make('Commentary')
+                ->nullable()
+                ->rules('nullable', 'exists:commentaries,id'),
 
-            Text::make('Slug')
-                ->hideWhenCreating()
-                ->rules('required', 'min:3', 'max:255'),
+            Text::make('Title')
+                ->rules('required', 'min:3'),
 
-            Textarea::make('Description')
-                ->hideFromIndex()
-                ->rules('min:10'),
+            Text::make('Source', 'source_url')
+                ->rules('nullable', 'min:3', 'url'),
 
-            Image::make('Logo', 'logo_url'),
+            Image::make('Image', 'image_url')
+                ->disk('public'),
 
-            Image::make('Background image', 'image_url'),
-
-            HasMany::make('Sources'),
-            HasMany::make('Posts'),
+            Trix::make('Description')
+                ->rules('required', 'min:10'),
         ];
     }
 
@@ -97,9 +93,7 @@ class Brand extends Resource
      */
     public function filters(Request $request)
     {
-        return [
-            CategoriesFilter::make(),
-        ];
+        return [];
     }
 
     /**

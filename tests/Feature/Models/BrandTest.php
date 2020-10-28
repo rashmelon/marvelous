@@ -41,4 +41,12 @@ class BrandTest extends TestCase
             Brand::factory()->create()->sources
         );
     }
+
+    public function testHasManyPostsThroughSources()
+    {
+        $this->assertInstanceOf(
+            Collection::class,
+            Brand::factory()->create()->posts
+        );
+    }
 }

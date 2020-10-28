@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
@@ -42,17 +44,17 @@ class Category extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function brands()
+    public function brands(): HasMany
     {
         return $this->hasMany(Brand::class);
     }
 
     /**
-     * Get the category commentaries.
+     * A post has many commentaries.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function commentaries()
+    public function commentaries(): HasMany
     {
         return $this->hasMany(Commentary::class);
     }

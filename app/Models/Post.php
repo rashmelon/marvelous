@@ -9,24 +9,19 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 /**
- * @property int $id
- * @property int $user_id
  * @property string $title
- * @property string $slug
- * @property string $body
- * @property \App\Models\User $author
+ * @property string $image_url
+ * @property string $source_url
+ * @property string $description
+ * @property int $source_id
+ * @property int $commentary_id
+ * @property \App\Models\Source $source
+ * @property \App\Models\Commentary $commentary
  */
-class Commentary extends Model
+class Post extends Model
 {
     use HasFactory;
     use HasSlug;
-
-    /**
-     * Don't auto apply mass-assignment protection.
-     *
-     * @var array
-     */
-    protected $guarded = [];
 
     /**
      * Get the options for generating the slug.
@@ -41,22 +36,22 @@ class Commentary extends Model
     }
 
     /**
-     * Get the commentary author.
+     * Get the post source.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function author(): BelongsTo
+    public function source(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(Source::class);
     }
 
     /**
-     * Get the commentary category.
+     * A post belongs to a commentary.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function category(): BelongsTo
+    public function commentary(): BelongsTo
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Commentary::class);
     }
 }
