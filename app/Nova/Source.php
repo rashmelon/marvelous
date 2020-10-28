@@ -55,7 +55,7 @@ class Source extends Resource
             BelongsTo::make('Brand'),
 
             Select::make('Type')->options([
-                \App\Models\Source::XML_FEED => \App\Models\Source::XML_FEED,
+                \App\Models\Source::XML_FEED => 'XML feed url',
             ]),
 
             Text::make('Name')

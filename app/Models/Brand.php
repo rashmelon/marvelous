@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
@@ -16,6 +18,7 @@ use Spatie\Sluggable\SlugOptions;
  * @property string $image_url
  * @property string $description
  * @property \App\Models\Category $category
+ * @property \Illuminate\Database\Eloquent\Collection $sources
  */
 class Brand extends Model
 {
@@ -45,8 +48,18 @@ class Brand extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * A brand can have many content sources.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function sources(): HasMany
+    {
+        return $this->hasMany(Source::class);
     }
 }

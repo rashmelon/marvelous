@@ -5,6 +5,7 @@ namespace App\Nova;
 use App\Nova\Filters\CategoriesFilter;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Text;
@@ -71,6 +72,8 @@ class Brand extends Resource
             Image::make('Logo', 'logo_url'),
 
             Image::make('Background image', 'image_url'),
+
+            HasMany::make('Sources'),
         ];
     }
 
