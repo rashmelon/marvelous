@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Models;
 
+use App\Models\Brand;
 use App\Models\Post;
 use App\Models\Source;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -30,6 +31,14 @@ class PostTest extends TestCase
         $this->assertInstanceOf(
             Source::class,
             Post::factory()->create()->source,
+        );
+    }
+
+    public function testBelongsToBrand()
+    {
+        $this->assertInstanceOf(
+            Brand::class,
+            Post::factory()->create()->brand,
         );
     }
 }

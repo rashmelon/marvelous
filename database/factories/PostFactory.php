@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Brand;
 use App\Models\Commentary;
 use App\Models\Post;
 use App\Models\Source;
@@ -24,6 +25,7 @@ class PostFactory extends Factory
     public function definition()
     {
         return [
+            'brand_id' => Brand::factory(),
             'source_id' => Source::factory(),
             'commentary_id' => Commentary::factory(),
             'title' => $this->faker->sentence,

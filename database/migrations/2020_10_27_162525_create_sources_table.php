@@ -18,7 +18,7 @@ class CreateSourcesTable extends Migration
             $table->string('type');
             $table->string('name');
             $table->string('source_url');
-            $table->text('description');
+            $table->text('description')->nullable();
 
             $table->foreignId('brand_id')
                 ->constrained()

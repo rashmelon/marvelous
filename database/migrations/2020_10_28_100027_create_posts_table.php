@@ -17,9 +17,14 @@ class CreatePostsTable extends Migration
             $table->id();
             $table->string('slug')->unique();
             $table->string('title');
-            $table->string('image_url');
-            $table->string('source_url')->nullable();
+            $table->text('image_url')->nullable();
+            $table->text('source_url')->nullable();
             $table->text('description');
+
+            $table->foreignId('brand_id')
+                ->nullable()
+                ->constrained()
+                ->nullOnDelete();
 
             $table->foreignId('source_id')
                 ->nullable()

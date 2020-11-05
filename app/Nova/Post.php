@@ -2,7 +2,9 @@
 
 namespace App\Nova;
 
+use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Image;
@@ -30,7 +32,7 @@ class Post extends Resource
      *
      * @var string
      */
-    public static $title = 'title';
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -58,16 +60,24 @@ class Post extends Resource
 
             BelongsTo::make('Commentary')
                 ->nullable()
-                ->rules('nullable', 'exists:commentaries,id'),
+                ->rules('nullable', 'exists:commentaries,id')
+                ->hideFromIndex(),
 
             Text::make('Title')
-                ->rules('required', 'min:3'),
+                ->displayUsing(function ($title) {
+                    return Str::substr($title, 0, 50) . '...';
+                })->onlyOnIndex(),
+
+            Text::make('Title')
+                ->rules('required', 'min:3')
+                ->hideFromIndex(),
 
             Text::make('Source', 'source_url')
-                ->rules('nullable', 'min:3', 'url'),
+                ->rules('nullable', 'min:3', 'url')
+                ->hideFromIndex(),
 
-            Image::make('Image', 'image_url')
-                ->disk('public'),
+            ExternalImage::make('Image', 'image_url')
+                ->width(30),
 
             Trix::make('Description')
                 ->rules('required', 'min:10'),

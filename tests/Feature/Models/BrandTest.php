@@ -42,7 +42,7 @@ class BrandTest extends TestCase
         );
     }
 
-    public function testHasManyPostsThroughSources()
+    public function testHasManyPosts()
     {
         $this->assertInstanceOf(
             Collection::class,

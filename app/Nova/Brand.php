@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\ImportPostsFromSources;
 use App\Nova\Filters\CategoriesFilter;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
@@ -121,6 +122,8 @@ class Brand extends Resource
      */
     public function actions(Request $request)
     {
-        return [];
+        return [
+            ImportPostsFromSources::make(),
+        ];
     }
 }

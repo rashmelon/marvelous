@@ -15,6 +15,7 @@ use Spatie\Sluggable\SlugOptions;
  * @property string $description
  * @property int $source_id
  * @property int $commentary_id
+ * @property \App\Models\Brand $brand
  * @property \App\Models\Source $source
  * @property \App\Models\Commentary $commentary
  */
@@ -22,6 +23,13 @@ class Post extends Model
 {
     use HasFactory;
     use HasSlug;
+
+    /**
+     * Don't auto apply mass-assignment protection.
+     *
+     * @var array
+     */
+    protected $guarded = [];
 
     /**
      * Get the options for generating the slug.
@@ -33,6 +41,16 @@ class Post extends Model
         return SlugOptions::create()
             ->generateSlugsFrom('title')
             ->saveSlugsTo('slug');
+    }
+
+    /**
+     * Get the post brand.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class);
     }
 
     /**

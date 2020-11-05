@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "12d33d866d8339cd1c39287afb91b0e2",
+    "content-hash": "4c108da6cfc5c9a3fba35d642ffe94e4",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -216,6 +216,47 @@
                 "time"
             ],
             "time": "2020-08-22T02:42:12+00:00"
+        },
+        {
+            "name": "chaseconey/nova-external-image",
+            "version": "0.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/chaseconey/nova-external-image.git",
+                "reference": "13f08d153d11dbd86a457a31142b88bb30b6ab36"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/chaseconey/nova-external-image/zipball/13f08d153d11dbd86a457a31142b88bb30b6ab36",
+                "reference": "13f08d153d11dbd86a457a31142b88bb30b6ab36",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Chaseconey\\ExternalImage\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Chaseconey\\ExternalImage\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova field.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "time": "2020-08-15T01:49:08+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",

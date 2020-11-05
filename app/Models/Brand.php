@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
@@ -20,6 +19,7 @@ use Spatie\Sluggable\SlugOptions;
  * @property string $description
  * @property \App\Models\Category $category
  * @property \Illuminate\Database\Eloquent\Collection $sources
+ * @property \Illuminate\Database\Eloquent\Collection $posts
  */
 class Brand extends Model
 {
@@ -66,12 +66,12 @@ class Brand extends Model
     }
 
     /**
-     * A brand can have many posts through many sources.
+     * A brand can have many posts.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function posts(): HasManyThrough
+    public function posts(): HasMany
     {
-        return $this->hasManyThrough(Post::class, Source::class);
+        return $this->hasMany(Post::class);
     }
 }
