@@ -2,10 +2,14 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\Publish;
+use App\Nova\Actions\UnPublish;
 use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Text;
@@ -81,6 +85,13 @@ class Post extends Resource
 
             Trix::make('Description')
                 ->rules('required', 'min:10'),
+
+            Boolean::make('Published', 'published'),
+
+            Date::make('Published at')
+                ->nullable()
+                ->rules('nullable', 'date')
+                ->hideFromIndex(),
         ];
     }
 
@@ -125,6 +136,9 @@ class Post extends Resource
      */
     public function actions(Request $request)
     {
-        return [];
+        return [
+            Publish::make(),
+            UnPublish::make(),
+        ];
     }
 }

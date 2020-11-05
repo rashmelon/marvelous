@@ -20,6 +20,7 @@ class CreatePostsTable extends Migration
             $table->text('image_url')->nullable();
             $table->text('source_url')->nullable();
             $table->text('description');
+            $table->timestamp('published_at')->nullable();
 
             $table->foreignId('brand_id')
                 ->nullable()
