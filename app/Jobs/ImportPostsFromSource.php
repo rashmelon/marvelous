@@ -14,15 +14,33 @@ use stdClass;
 
 class ImportPostsFromSource implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
+    /**
+     * The sources to load.
+     *
+     * @var \App\Models\Source
+     */
     private $source;
 
+    /**
+     * ImportPostsFromSource constructor.
+     *
+     * @param  \App\Models\Source  $source
+     */
     public function __construct(Source $source)
     {
         $this->source = $source;
     }
 
+    /**
+     * Run the job.
+     *
+     * @return mixed
+     */
     public function handle()
     {
         $this->parseXML()->each(function (stdClass $postData) {
@@ -30,6 +48,11 @@ class ImportPostsFromSource implements ShouldQueue
         });
     }
 
+    /**
+     * Parse the rss feed xml.
+     *
+     * @return \Illuminate\Support\Collection
+     */
     protected function parseXML(): Collection
     {
         $json = json_encode(
@@ -39,18 +62,36 @@ class ImportPostsFromSource implements ShouldQueue
         return collect(json_decode($json)->channel->item);
     }
 
-    protected function saveBrandPost(stdClass $postData): Post
+    /**
+     * Save the post to the db.
+     *
+     * @param  \stdClass  $postData
+     * @return false|\Illuminate\Database\Eloquent\Model
+     */
+    protected function saveBrandPost(stdClass $postData)
     {
+        if (Post::where('guid', $postData->guid)->count()) {
+            return false;
+        }
+
         return $this->source->brand->posts()->create(
             $this->mapPostData($postData)
         );
     }
 
+    /**
+     * Map post data to local model post data.
+     *
+     * @param  \stdClass  $postData
+     * @return array
+     */
     protected function mapPostData(stdClass $postData): array
     {
         $attributes = '@attributes';
 
         return [
+            'guid' => $postData->guid,
+            'brand_id' => $this->source->brand->id,
             'source_id' => $this->source->id,
             'title' => $postData->title,
             'description' => $postData->description,

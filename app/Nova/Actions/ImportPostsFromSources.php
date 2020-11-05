@@ -12,7 +12,8 @@ use Laravel\Nova\Fields\ActionFields;
 
 class ImportPostsFromSources extends Action
 {
-    use InteractsWithQueue, Queueable;
+    use InteractsWithQueue;
+    use Queueable;
 
     /**
      * Perform the action on the given models.
@@ -26,15 +27,5 @@ class ImportPostsFromSources extends Action
         $models->flatMap->sources->each(function (Source $source) {
             ImportPostsFromSource::dispatch($source);
         });
-    }
-
-    /**
-     * Get the fields available on the action.
-     *
-     * @return array
-     */
-    public function fields()
-    {
-        return [];
     }
 }
