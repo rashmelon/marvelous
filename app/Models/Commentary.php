@@ -29,6 +29,34 @@ class Commentary extends Model
     protected $guarded = [];
 
     /**
+     * The attributes that should be mutated to dates.
+     *
+     * @deprecated Use the "casts" property
+     *
+     * @var array
+     */
+    protected $dates = [
+        'last_assigned',
+    ];
+
+    /**
+     * Get the next commentary to be assigned for the category.
+     *
+     * @param  \App\Models\Category  $category
+     * @return \App\Models\Commentary
+     */
+    public static function next(Category $category): Commentary
+    {
+        $notYetAssigned = static::where('category_id', $category->id)->whereNull('last_assigned')->first();
+
+        if (! is_null($notYetAssigned)) {
+            return $notYetAssigned;
+        }
+
+        return static::where('category_id', $category->id)->orderBy('last_assigned', 'asc')->first();
+    }
+
+    /**
      * Get the options for generating the slug.
      *
      * @return \Spatie\Sluggable\SlugOptions

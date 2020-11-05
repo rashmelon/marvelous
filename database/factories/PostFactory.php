@@ -27,7 +27,7 @@ class PostFactory extends Factory
         return [
             'brand_id' => Brand::factory(),
             'source_id' => Source::factory(),
-            'commentary_id' => Commentary::factory(),
+            'guid' => $this->faker->uuid,
             'title' => $this->faker->sentence,
             'description' => $this->faker->randomHtml(2),
             'image_url' => $this->faker->imageUrl(),

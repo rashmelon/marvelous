@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Observers\PostObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -43,6 +44,18 @@ class Post extends Model
     protected $dates = [
         'published_at',
     ];
+
+    /**
+     * Bootstrap the model and its traits.
+     *
+     * @return void
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        static::observe(PostObserver::class);
+    }
 
     /**
      * Get the options for generating the slug.

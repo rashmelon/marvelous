@@ -18,6 +18,7 @@ class CreateCommentariesTable extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->string('body');
+            $table->timestamp('last_assigned')->nullable();
 
             $table->foreignId('category_id')
                 ->nullable()
