@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Observers\PostObserver;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -142,5 +143,16 @@ class Post extends Model
         return $this->update([
             'published_at' => null,
         ]);
+    }
+
+    /**
+     * Filter to only published posts.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $builder
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePublished(Builder $builder): Builder
+    {
+        return $builder->whereNotNull('published');
     }
 }

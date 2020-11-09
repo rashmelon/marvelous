@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\PostsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('posts', PostsController::class.'@index')
+    ->name('api.posts.index');
+
+Route::get('post/{post}', PostsController::class.'@show')
+    ->name('api.posts.show');
