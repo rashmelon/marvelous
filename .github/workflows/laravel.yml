@@ -26,7 +26,7 @@ jobs:
           mkdir -p database
           touch database/database.sqlite
       - name: Install Passport
-        run: php artisan passport:install
+        run: php artisan passport:key
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
           DB_CONNECTION: sqlite
