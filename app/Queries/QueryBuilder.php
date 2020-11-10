@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Queries;
-
 
 class QueryBuilder extends \Spatie\QueryBuilder\QueryBuilder
 {
@@ -11,8 +9,8 @@ class QueryBuilder extends \Spatie\QueryBuilder\QueryBuilder
     {
         $page = $this->request->input('page');
 
-        $number = isset($page['number'])? $page['number']: null;
-        $size = isset($page['size'])? $page['size']: null;
+        $number = isset($page['number']) ? $page['number'] : null;
+        $size = isset($page['size']) ? $page['size'] : null;
 
         return $this->paginate($size, ['*'], 'page', $number);
     }
