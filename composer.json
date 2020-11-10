@@ -77,9 +77,15 @@
             "./vendor/bin/phpstan analyze"
         ],
         "code-sniffer": [
+            "vendor/bin/phpcs --standard=PSR12 -n app"
+        ],
+        "code-sniffer-windows": [
             "vendor\\bin\\phpcs --standard=PSR12 -n app"
         ],
         "code-fixer": [
+            "vendor/bin/phpcbf --standard=PSR12 -n app"
+        ],
+        "code-fixer-windows": [
             "vendor\\bin\\phpcbf --standard=PSR12 -n app"
         ]
     }

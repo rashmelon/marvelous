@@ -18,36 +18,43 @@ class PostsControllerTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Post::factory()->count(10)->create(['published_at' => now()]);
+        Post::factory()->published()->count(10)->create();
         Passport::actingAs(User::factory()->create());
 
         $posts = Post::published()->join('brands', 'brands.id', 'posts.brand_id')->get();
 
-        $response  = $this->json('GET', route('api.posts.index'))
-            ->assertSuccessful();
-
-        $this->assertEquals($posts->toArray(), $response['data']);
+        $this->json('GET', route('api.posts.index'))
+            ->assertSuccessful()
+            ->assertJson(['data' => $posts->toArray()]);
     }
 
     public function testAuthenticatedUserCanFetchPostsWithPagination()
     {
         $this->withoutExceptionHandling();
 
-        Post::factory()->count(10)->create(['published_at' => now()]);
+        Post::factory()->published()->count(10)->create();
         Passport::actingAs(User::factory()->create());
         $size= 3;
 
         $posts = Post::published()->join('brands', 'brands.id', 'posts.brand_id')->limit($size)->get();
 
         $response  = $this->json('GET', route('api.posts.index').'?page[size]='.$size)
-            ->assertSuccessful();
+            ->assertSuccessful()
+            ->assertJson(['data' => $posts->toArray()]);
 
-        $this->assertEquals($posts->toArray(), $response['data']);
+        $this->assertArrayHasKey('current_page', $response);
+        $this->assertArrayHasKey('first_page_url', $response);
+        $this->assertArrayHasKey('last_page', $response);
+        $this->assertArrayHasKey('last_page_url', $response);
+        $this->assertArrayHasKey('next_page_url', $response);
+        $this->assertArrayHasKey('per_page', $response);
+        $this->assertArrayHasKey('total', $response);
+        $this->assertArrayHasKey('links', $response);
     }
 
-    public function testUnauthenticatedUserCantFetchPosts()
+    public function testUnauthenticatedUserCanNotFetchPosts()
     {
-        Post::factory()->count(10)->create(['published_at' => now()]);
+        Post::factory()->published()->count(10)->create();
 
         $this->json('GET', route('api.posts.index'))
             ->assertUnauthorized();
@@ -65,7 +72,7 @@ class PostsControllerTest extends TestCase
             ->assertJson(Post::first()->toArray());
     }
 
-    public function testUnauthenticatedUserCantFetchPostDetails()
+    public function testUnauthenticatedUserCanNotFetchPostDetails()
     {
         $post = Post::factory()->create();
 
