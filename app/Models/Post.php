@@ -153,6 +153,6 @@ class Post extends Model
      */
     public function scopePublished(Builder $builder): Builder
     {
-        return $builder->whereNotNull('published');
+        return $builder->whereNotNull('published_at');
     }
 }
