@@ -40,7 +40,7 @@ class PostsControllerTest extends TestCase
 
         $posts = Post::published()->join('brands', 'brands.id', 'posts.brand_id')->brand($brand->id)->get();
 
-        $this->json('GET', route('api.posts.index'))
+        $this->json('GET', route('api.posts.index').'?filter[brands.id]='.$brand->id)
             ->assertSuccessful()
             ->assertJson(['data' => $posts->toArray()]);
     }
@@ -56,7 +56,7 @@ class PostsControllerTest extends TestCase
 
         $posts = Post::published()->join('brands', 'brands.id', 'posts.brand_id')->brandSlug($brand->slug)->get();
 
-        $this->json('GET', route('api.posts.index'))
+        $this->json('GET', route('api.posts.index').'?filter[brands.slug]='.$brand->slug)
             ->assertSuccessful()
             ->assertJson(['data' => $posts->toArray()]);
     }
