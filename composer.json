@@ -76,6 +76,9 @@
         "analyze": [
             "./vendor/bin/phpstan analyze"
         ],
+        "analyze-windows": [
+            "vendor\\bin\\phpstan analyze"
+        ],
         "code-sniffer": [
             "vendor/bin/phpcs --standard=PSR12 -n app"
         ],
