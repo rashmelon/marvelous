@@ -155,4 +155,30 @@ class Post extends Model
     {
         return $builder->whereNotNull('published_at');
     }
+
+    /**
+     * Filter to posts with brand id.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeBrand(Builder $builder, $value): Builder
+    {
+        return $builder->where('brand_id', $value);
+    }
+
+    /**
+     * Filter to posts with brand slug.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeBrandSlug(Builder $builder, $value): Builder
+    {
+        return $builder->whereHas('brand', function (Builder $builder) use ($value) {
+            $builder->where('slug', $value);
+        });
+    }
 }

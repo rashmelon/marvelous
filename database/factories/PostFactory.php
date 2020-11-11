@@ -37,17 +37,33 @@ class PostFactory extends Factory
             'source_url' => $this->faker->url,
         ];
     }
+
     /**
-     * Indicate that the user is suspended.
+     * Indicate that the post is published.
      *
      * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
-        public function published()
-        {
-            return $this->state(function (array $attributes) {
-                return [
-                    'published_at' => now()
-                ];
-            });
-        }
+    public function published()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'published_at' => now()
+            ];
+        });
     }
+
+    /**
+     * Indicate that the post associated with brand.
+     *
+     * @param $brand
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function brand($brand)
+    {
+        return $this->state(function (array $attributes) use ($brand) {
+            return [
+                'brand_id' => $brand
+            ];
+        });
+    }
+}

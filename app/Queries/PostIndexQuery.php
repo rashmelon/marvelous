@@ -32,7 +32,9 @@ class PostIndexQuery extends QueryBuilder
             AllowedFilter::custom('search', new FuzzyFilter(
                 'brands.name',
                 'posts.title',
-            ))
+            )),
+            AllowedFilter::exact('brands.id'),
+            AllowedFilter::exact('brands.slug'),
         ]);
     }
 }

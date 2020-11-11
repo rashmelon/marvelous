@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controllers\Api;
 
+use App\Models\Brand;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -22,6 +23,38 @@ class PostsControllerTest extends TestCase
         Passport::actingAs(User::factory()->create());
 
         $posts = Post::published()->join('brands', 'brands.id', 'posts.brand_id')->get();
+
+        $this->json('GET', route('api.posts.index'))
+            ->assertSuccessful()
+            ->assertJson(['data' => $posts->toArray()]);
+    }
+
+    public function testAuthenticatedUserCanFetchPostsFilteredByBrandId()
+    {
+        $this->withoutExceptionHandling();
+
+        $brand = Brand::factory()->create();
+        Post::factory()->brand($brand)->published()->count(10)->create();
+        Post::factory()->published()->count(10)->create();
+        Passport::actingAs(User::factory()->create());
+
+        $posts = Post::published()->join('brands', 'brands.id', 'posts.brand_id')->brand($brand->id)->get();
+
+        $this->json('GET', route('api.posts.index'))
+            ->assertSuccessful()
+            ->assertJson(['data' => $posts->toArray()]);
+    }
+
+    public function testAuthenticatedUserCanFetchPostsFilteredByBrandSlug()
+    {
+        $this->withoutExceptionHandling();
+
+        $brand = Brand::factory()->create();
+        Post::factory()->brand($brand)->published()->count(10)->create();
+        Post::factory()->published()->count(10)->create();
+        Passport::actingAs(User::factory()->create());
+
+        $posts = Post::published()->join('brands', 'brands.id', 'posts.brand_id')->brandSlug($brand->slug)->get();
 
         $this->json('GET', route('api.posts.index'))
             ->assertSuccessful()
