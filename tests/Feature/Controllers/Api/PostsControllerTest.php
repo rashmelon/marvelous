@@ -19,10 +19,16 @@ class PostsControllerTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Post::factory()->published()->count(10)->create();
+        Post::factory()
+            ->published()
+            ->count(10)
+            ->create();
+
         Passport::actingAs(User::factory()->create());
 
-        $posts = Post::published()->join('brands', 'brands.id', 'posts.brand_id')->get();
+        $posts = Post::published()
+            ->join('brands', 'brands.id', 'posts.brand_id')
+            ->get();
 
         $this->json('GET', route('api.posts.index'))
             ->assertSuccessful()
@@ -33,12 +39,21 @@ class PostsControllerTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $brand = Brand::factory()->create();
-        Post::factory()->brand($brand)->published()->count(10)->create();
-        Post::factory()->published()->count(10)->create();
+        $brand = Brand::factory()
+            ->has(Post::factory()->published()->count(10))
+            ->create();
+
+        Post::factory()
+            ->published()
+            ->count(10)
+            ->create();
+
         Passport::actingAs(User::factory()->create());
 
-        $posts = Post::published()->join('brands', 'brands.id', 'posts.brand_id')->brand($brand->id)->get();
+        $posts = Post::published()
+            ->join('brands', 'brands.id', 'posts.brand_id')
+            ->brand($brand->id)
+            ->get();
 
         $this->json('GET', route('api.posts.index').'?filter[brands.id]='.$brand->id)
             ->assertSuccessful()
@@ -49,12 +64,21 @@ class PostsControllerTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $brand = Brand::factory()->create();
-        Post::factory()->brand($brand)->published()->count(10)->create();
-        Post::factory()->published()->count(10)->create();
+        $brand = Brand::factory()
+            ->has(Post::factory()->published()->count(10))
+            ->create();
+
+        Post::factory()
+            ->published()
+            ->count(10)
+            ->create();
+
         Passport::actingAs(User::factory()->create());
 
-        $posts = Post::published()->join('brands', 'brands.id', 'posts.brand_id')->brandSlug($brand->slug)->get();
+        $posts = Post::published()
+            ->join('brands', 'brands.id', 'posts.brand_id')
+            ->brandSlug($brand->slug)
+            ->get();
 
         $this->json('GET', route('api.posts.index').'?filter[brands.slug]='.$brand->slug)
             ->assertSuccessful()
@@ -65,11 +89,19 @@ class PostsControllerTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Post::factory()->published()->count(10)->create();
+        Post::factory()
+            ->published()
+            ->count(10)
+            ->create();
+
         Passport::actingAs(User::factory()->create());
+
         $size= 3;
 
-        $posts = Post::published()->join('brands', 'brands.id', 'posts.brand_id')->limit($size)->get();
+        $posts = Post::published()
+            ->join('brands', 'brands.id', 'posts.brand_id')
+            ->limit($size)
+            ->get();
 
         $response  = $this->json('GET', route('api.posts.index').'?page[size]='.$size)
             ->assertSuccessful()
@@ -87,7 +119,10 @@ class PostsControllerTest extends TestCase
 
     public function testUnauthenticatedUserCanNotFetchPosts()
     {
-        Post::factory()->published()->count(10)->create();
+        Post::factory()
+            ->published()
+            ->count(10)
+            ->create();
 
         $this->json('GET', route('api.posts.index'))
             ->assertUnauthorized();
@@ -97,7 +132,9 @@ class PostsControllerTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $post = Post::factory()->create();
+        $post = Post::factory()
+            ->create();
+
         Passport::actingAs(User::factory()->create());
 
         $this->json('GET', route('api.posts.show', $post))
@@ -107,7 +144,8 @@ class PostsControllerTest extends TestCase
 
     public function testUnauthenticatedUserCanNotFetchPostDetails()
     {
-        $post = Post::factory()->create();
+        $post = Post::factory()
+            ->create();
 
         $this->json('GET', route('api.posts.show', $post))
             ->assertUnauthorized();
