@@ -26,3 +26,9 @@ Route::middleware('auth:api')->group(function(){
     Route::get('post/{post}', PostsController::class.'@show')
         ->name('api.posts.show');
 });
+
+Route::get('example-api', function () {
+    return response()->json([
+        'data' => \App\Models\Example::all()
+    ]);
+});
