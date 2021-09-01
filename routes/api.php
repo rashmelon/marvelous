@@ -27,8 +27,12 @@ Route::middleware('auth:api')->group(function(){
         ->name('api.posts.show');
 });
 
-Route::get('example-api', function () {
+Route::get('example-api', function (Request $request) {
     return response()->json([
-        'data' => \App\Models\Example::all()
+        'data' => \App\Models\Example::paginate(
+            $request->has('paginate')
+            ? $request->input('paginate')
+            : 5
+        )
     ]);
 });
