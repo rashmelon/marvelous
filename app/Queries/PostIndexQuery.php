@@ -6,7 +6,6 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
-use Spatie\QueryBuilder\QueryBuilder;
 use App\Support\Filters\FuzzyFilter;
 
 class PostIndexQuery extends QueryBuilder
@@ -33,7 +32,9 @@ class PostIndexQuery extends QueryBuilder
             AllowedFilter::custom('search', new FuzzyFilter(
                 'brands.name',
                 'posts.title',
-            ))
+            )),
+            AllowedFilter::exact('brands.id'),
+            AllowedFilter::exact('brands.slug'),
         ]);
     }
 }

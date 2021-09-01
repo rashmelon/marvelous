@@ -23,6 +23,7 @@
         "laravel/framework": "^8.0",
         "laravel/horizon": "^5.3",
         "laravel/nova": "*",
+        "laravel/passport": "^10.0",
         "laravel/telescope": "^4.2",
         "laravel/tinker": "^2.0",
         "spatie/laravel-query-builder": "^3.3",
@@ -75,11 +76,20 @@
         "analyze": [
             "./vendor/bin/phpstan analyze"
         ],
+        "analyze-windows": [
+            "vendor\\bin\\phpstan analyze"
+        ],
         "code-sniffer": [
             "vendor/bin/phpcs --standard=PSR12 -n app"
         ],
+        "code-sniffer-windows": [
+            "vendor\\bin\\phpcs --standard=PSR12 -n app"
+        ],
         "code-fixer": [
             "vendor/bin/phpcbf --standard=PSR12 -n app"
+        ],
+        "code-fixer-windows": [
+            "vendor\\bin\\phpcbf --standard=PSR12 -n app"
         ]
     }
 }

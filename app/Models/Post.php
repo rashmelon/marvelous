@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Builders\PostQueryBuilder;
 use App\Observers\PostObserver;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,10 +18,10 @@ use Spatie\Sluggable\SlugOptions;
  * @property string $description
  * @property int $source_id
  * @property int $commentary_id
- * @property \Illuminate\Support\Carbon $published_at
- * @property \App\Models\Brand $brand
- * @property \App\Models\Source $source
- * @property \App\Models\Commentary $commentary
+ * @property Carbon $published_at
+ * @property Brand $brand
+ * @property Source $source
+ * @property Commentary $commentary
  */
 class Post extends Model
 {
@@ -59,9 +59,20 @@ class Post extends Model
     }
 
     /**
+     * overrides default builder.
+     *
+     * @param $query
+     * @return PostQueryBuilder
+     */
+    public function newEloquentBuilder($query)
+    {
+        return new PostQueryBuilder($query);
+    }
+
+    /**
      * Get the options for generating the slug.
      *
-     * @return \Spatie\Sluggable\SlugOptions
+     * @return SlugOptions
      */
     public function getSlugOptions(): SlugOptions
     {
@@ -73,7 +84,7 @@ class Post extends Model
     /**
      * Get the post brand.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function brand(): BelongsTo
     {
@@ -83,7 +94,7 @@ class Post extends Model
     /**
      * Get the post source.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function source(): BelongsTo
     {
@@ -93,7 +104,7 @@ class Post extends Model
     /**
      * A post belongs to a commentary.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function commentary(): BelongsTo
     {
@@ -123,7 +134,7 @@ class Post extends Model
     /**
      * Mark the post as published.
      *
-     * @param  \Illuminate\Support\Carbon|null  $date
+     * @param Carbon|null  $date
      * @return bool
      */
     public function publish(Carbon $date = null): bool
@@ -143,16 +154,5 @@ class Post extends Model
         return $this->update([
             'published_at' => null,
         ]);
-    }
-
-    /**
-     * Filter to only published posts.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $builder
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopePublished(Builder $builder): Builder
-    {
-        return $builder->whereNotNull('published');
     }
 }

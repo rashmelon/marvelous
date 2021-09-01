@@ -19,8 +19,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('posts', PostsController::class.'@index')
-    ->name('api.posts.index');
+Route::middleware('auth:api')->group(function(){
+    Route::get('posts', PostsController::class.'@index')
+        ->name('api.posts.index');
 
-Route::get('post/{post}', PostsController::class.'@show')
-    ->name('api.posts.show');
+    Route::get('post/{post}', PostsController::class.'@show')
+        ->name('api.posts.show');
+});
+
+Route::get('example-api', function () {
+    return response()->json([
+        'data' => \App\Models\Example::all()
+    ]);
+});

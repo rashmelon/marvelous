@@ -16,7 +16,7 @@ class PostsController extends Controller
      */
     public function index(PostIndexQuery $query)
     {
-        return $query->paginate();
+        return $query->paginateFromRequest();
     }
 
     /**
